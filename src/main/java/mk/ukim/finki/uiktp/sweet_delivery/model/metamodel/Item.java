@@ -4,6 +4,7 @@ package mk.ukim.finki.uiktp.sweet_delivery.model.metamodel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mk.ukim.finki.uiktp.sweet_delivery.model.enums.ItemCategory;
 
 import javax.persistence.*;
 import java.util.List;
@@ -20,10 +21,13 @@ public class Item {
     private Long id;
 
     @Column
-    private Boolean in_stock;
+    private Integer items_in_stock;
 
     @Column
     private String name;
+
+    @Enumerated(value = EnumType.STRING)
+    private ItemCategory itemCategory;
 
     private Integer price;
 
@@ -32,7 +36,11 @@ public class Item {
     @ManyToMany
     private List<Recipe> recipeList;
 
-
-
-
+    public Item(Integer items_in_stock, String name, ItemCategory itemCategory, Integer price, String img_url) {
+        this.items_in_stock = items_in_stock;
+        this.name = name;
+        this.itemCategory = itemCategory;
+        this.price = price;
+        this.img_url = img_url;
+    }
 }

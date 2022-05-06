@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -17,9 +18,6 @@ public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column
-    private Boolean in_stock;
 
     @Column
     private String name;
@@ -44,5 +42,14 @@ public class Recipe {
     @JoinColumn(name  = "mm_post_id")
     private Post post;
 
-
+    public Recipe(String name, Integer price, List<Item> itemList, String description, String img_url) {
+        this.name = name;
+        this.price = price;
+        this.itemList = itemList;
+        this.description = description;
+        this.img_url = img_url;
+        this.ordersList = new ArrayList<>();
+        this.rating = null;
+        this.post = null;
+    }
 }

@@ -37,4 +37,11 @@ public class Order {
     @JoinColumn(name = "ur_user_id")
     private User user;
 
+    public Order(OffsetDateTime orderDate, Integer amount, String deliveryAddress, List<Recipe> recipeList, User user) {
+        this.orderDate = orderDate;
+        this.amount = amount;
+        this.deliveryAddress = deliveryAddress;
+        this.recipeList = recipeList;
+        this.user = user;
+    }
 }

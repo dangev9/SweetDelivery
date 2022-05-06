@@ -69,4 +69,13 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Coupon> coupons;
 
+    public User(String username, String firstName, String lastName, String email, String address, String password, OffsetDateTime date_created) {
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.address = address;
+        this.password = password;
+        this.date_created = date_created;
+    }
 }
