@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="ur_privilege", schema="userroles")
+@Table(name="ur_privilege")
 public class Privilege {
 
     @Id

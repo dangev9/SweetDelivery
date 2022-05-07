@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="mm_order", schema="metamodel")
+@Table(name="mm_order")
 public class Order {
 
     @Id

@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="mm_coupon", schema="metamodel")
+@Table(name="mm_coupon")
 public class Coupon {
 
     @Id

@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="mm_rating", schema="metamodel")
+@Table(name="mm_rating")
 public class Rating {
 
     @Id
