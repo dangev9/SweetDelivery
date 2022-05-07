@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="mm_item", schema="metamodel")
+@Table(name="mm_item")
 public class Item {
 
     @Id

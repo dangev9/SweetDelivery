@@ -16,7 +16,7 @@ import java.time.OffsetDateTime;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="mm_post", schema="metamodel")
+@Table(name="mm_post")
 public class Post {
 
     @Id
