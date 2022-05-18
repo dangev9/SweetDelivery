@@ -6,11 +6,15 @@ import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Item;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Post;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Rating;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Recipe;
+import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.dto.RecipeCreationDTO;
+import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.dto.RecipePostUpdateDTO;
+import mk.ukim.finki.uiktp.sweet_delivery.repository.ItemRepository;
+import mk.ukim.finki.uiktp.sweet_delivery.repository.PostRepository;
 import mk.ukim.finki.uiktp.sweet_delivery.repository.RecipeRepository;
 import mk.ukim.finki.uiktp.sweet_delivery.service.RecipeService;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -19,36 +23,59 @@ import java.util.stream.Collectors;
 @Service
 public class RecipeServiceImpl implements RecipeService {
     private final RecipeRepository recipeRepository;
+    private final ItemRepository itemRepository;
+    private final PostRepository postRepository;
 
-    public RecipeServiceImpl(RecipeRepository recipeRepository) {
+    public RecipeServiceImpl(RecipeRepository recipeRepository, ItemRepository itemRepository, PostRepository postRepository) {
         this.recipeRepository = recipeRepository;
+        this.itemRepository = itemRepository;
+        this.postRepository = postRepository;
     }
 
     @Override
-    public Optional<Recipe> createRecipe(String recipeName, Integer price, List<Item> itemsList, String description,
-                                         String img_url) {
+    public Recipe createRecipe(RecipeCreationDTO recipeCreationDTO) {
 
-        if(this.recipeRepository.findByName(recipeName).isPresent()) {
-            throw new RecipeAlreadyExistsException(recipeName);
+        if(this.recipeRepository.findByName(recipeCreationDTO.getName()).isPresent()) {
+            throw new RecipeAlreadyExistsException(recipeCreationDTO.getName());
         }
 
-        return Optional.of(this.recipeRepository.save(new Recipe(recipeName, price, itemsList, description, img_url)));
+        Recipe recipe = new Recipe();
+        if(recipeCreationDTO.getName()!=null){
+            recipe.setName(recipeCreationDTO.getName());
+        }
+        if(recipeCreationDTO.getImg_url()!=null){
+            recipe.setImg_url(recipeCreationDTO.getImg_url());
+        }
+        if(recipeCreationDTO.getDescription()!=null){
+            recipe.setDescription(recipeCreationDTO.getDescription());
+        }
+        if(recipeCreationDTO.getPrice()!=null){
+            recipe.setPrice(recipeCreationDTO.getPrice());
+        }
+        List<Long> list = recipeCreationDTO.getItemList();
+        List<Item> itemList = new ArrayList<>();
+        for(int i =0;i<list.size();i++){
+            Item item = this.itemRepository.getById(list.get(i));
+            itemList.add(item);
+        }
+
+        recipe.setItemList(itemList);
+        return this.recipeRepository.save(recipe);
     }
 
     @Override
-    public Optional<Recipe> updateRecipePost(Long recipeId, Post post) {
-        Recipe recipe = this.recipeRepository.findById(recipeId).orElseThrow(RecipeNotFoundException::new);
-
+    public Recipe updateRecipePost(RecipePostUpdateDTO recipePostUpdateDTO) {
+        Recipe recipe = this.recipeRepository.findById(recipePostUpdateDTO.getRecipeId()).orElseThrow(RecipeNotFoundException::new);
+        Post post = this.postRepository.getById(recipePostUpdateDTO.getPostId());
         recipe.setPost(post);
 
-        return Optional.of(this.recipeRepository.save(recipe));
+        return this.recipeRepository.save(recipe);
     }
 
     @Override
-    public Optional<Recipe> deleteRecipe(Long recipeId) {
+    public void deleteById(Long recipeId) {
         Recipe recipe = this.recipeRepository.findById(recipeId).orElseThrow(RecipeNotFoundException::new);
         this.recipeRepository.deleteById(recipeId);
-        return Optional.of(recipe);
     }
 
     @Override
@@ -74,11 +101,6 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Optional<Recipe> getRecipeByName(String recipeName) {
-        return this.recipeRepository.findByName(recipeName);
-    }
-
-    @Override
     public Optional<Recipe> leaveRating(Long recipeId, Rating rating) {
         // TODO: Change this, recipe must have decimal rating
         Recipe recipe = this.recipeRepository.findById(recipeId).orElseThrow(RecipeNotFoundException::new);
@@ -86,4 +108,5 @@ public class RecipeServiceImpl implements RecipeService {
         this.recipeRepository.save(recipe);
         return Optional.of(recipe);
     }
+
 }
