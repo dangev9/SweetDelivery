@@ -1,5 +1,6 @@
 package mk.ukim.finki.uiktp.sweet_delivery.service.impl;
 
+import mk.ukim.finki.uiktp.sweet_delivery.model.enums.PostStatus;
 import mk.ukim.finki.uiktp.sweet_delivery.model.exceptions.PostNotFoundException;
 import mk.ukim.finki.uiktp.sweet_delivery.model.exceptions.UserNotFoundException;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Post;
@@ -13,7 +14,8 @@ import mk.ukim.finki.uiktp.sweet_delivery.service.PostService;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -47,5 +49,33 @@ public class PostServiceImpl implements PostService {
     public void deletePost(Long postId) {
         Post post = this.postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
         this.postRepository.deleteById(postId);
+    }
+
+    @Override
+    public List<Post> getAllPosts() {
+        // Return all Posts (pending/approved/denied)
+        return this.postRepository.findAll();
+    }
+
+    @Override
+    public List<Post> getAllApprovedPosts() {
+        // Return only APPROVED Posts
+        return this.postRepository.findAll()
+                .stream().filter(x-> x.getPostStatus().equals(PostStatus.APPROVED))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void approvePost(Long postId) {
+        Post post = this.postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
+        post.setPostStatus(PostStatus.APPROVED);
+        this.postRepository.save(post);
+    }
+
+    @Override
+    public void declinePost(Long postId) {
+        Post post = this.postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
+        post.setPostStatus(PostStatus.DECLINED);
+        this.postRepository.save(post);
     }
 }
