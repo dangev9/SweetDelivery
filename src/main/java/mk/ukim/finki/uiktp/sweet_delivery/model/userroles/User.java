@@ -12,6 +12,7 @@ import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Rating;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -26,7 +27,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Size(min = 4, max = 255, message = "Minimum username length: 4 characters")
+    @Column(unique = true, nullable = false)
     private String username;
 
     @Column
@@ -35,7 +37,7 @@ public class User {
     @Column
     private String lastName;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
     @Column
@@ -43,15 +45,16 @@ public class User {
 
     @Column
     @JsonIgnore
+    @Size(min = 8, message = "Minimum password length: 8 characters")
     private String password;
 
     @Column
     @CreationTimestamp
     private OffsetDateTime date_created;
 
-    @JsonIgnore
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
-    private List<UserRole> userRoles;
+//    @JsonIgnore
+//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+//    private List<UserRole> userRoles;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")
@@ -68,6 +71,9 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Coupon> coupons;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    List<AppUserRole> appUserRoles;
 
     public User(String username, String firstName, String lastName, String email, String address, String password, OffsetDateTime date_created) {
         this.username = username;
