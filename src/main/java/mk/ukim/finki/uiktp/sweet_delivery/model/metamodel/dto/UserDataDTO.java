@@ -20,4 +20,13 @@ public class UserDataDTO {
     @ApiModelProperty(position = 3)
     List<AppUserRole> appUserRoles;
 
+    @ApiModelProperty
+    private String address;
+
+    @ApiModelProperty
+    private String firstName;
+
+    @ApiModelProperty
+    private String lastName;
+
 }
