@@ -1,6 +1,7 @@
 package mk.ukim.finki.uiktp.sweet_delivery.model.metamodel;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class Recipe {
 
     private Integer price;
 
+    @JsonManagedReference
     @ManyToMany
     private List<Item> itemList;
 

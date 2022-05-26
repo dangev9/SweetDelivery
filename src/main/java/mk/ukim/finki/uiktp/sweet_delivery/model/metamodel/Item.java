@@ -1,6 +1,7 @@
 package mk.ukim.finki.uiktp.sweet_delivery.model.metamodel;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,7 @@ public class Item {
     private String img_url;
 
     @ManyToMany
+    @JsonBackReference
     private List<Recipe> recipeList;
 
     public Item(Integer items_in_stock, String name, ItemCategory itemCategory, Integer price, String img_url) {

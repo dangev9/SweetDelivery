@@ -11,6 +11,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/rest/item")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ItemController {
 
     private final ItemService itemService;

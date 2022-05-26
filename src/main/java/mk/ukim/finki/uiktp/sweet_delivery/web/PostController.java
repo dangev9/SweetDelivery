@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/rest/post")
+@CrossOrigin(origins = "http://localhost:3000")
 public class PostController {
     private final PostService postService;
 
