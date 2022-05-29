@@ -37,6 +37,7 @@ public class Recipe {
     private String img_url;
 
     @ManyToOne
+    @JsonManagedReference
     @JoinColumn(name = "mm_rating_id")
     private Rating rating;
 

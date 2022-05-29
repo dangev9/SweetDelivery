@@ -102,8 +102,8 @@ public class UserController {
         return this.userService.findById(userId);
     }
 
-    @GetMapping("findByUsername")
-    public Optional<User> findByUsername(String username)
+    @GetMapping("findByUsername/{username}")
+    public Optional<User> findByUsername(@PathVariable String username)
     {
         return this.userService.findByUsername(username);
     }

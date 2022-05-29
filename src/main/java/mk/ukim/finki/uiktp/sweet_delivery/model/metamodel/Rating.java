@@ -1,6 +1,7 @@
 package mk.ukim.finki.uiktp.sweet_delivery.model.metamodel;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class Rating {
     private User user;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "mm_recipe_id")
     private Recipe recipe;
 
