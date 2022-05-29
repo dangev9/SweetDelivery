@@ -6,6 +6,7 @@ import mk.ukim.finki.uiktp.sweet_delivery.model.exceptions.CustomException;
 import mk.ukim.finki.uiktp.sweet_delivery.model.exceptions.InvalidUserIdException;
 import mk.ukim.finki.uiktp.sweet_delivery.model.exceptions.InvalidUsernameOrPasswordException;
 import mk.ukim.finki.uiktp.sweet_delivery.model.exceptions.UsernameTakenException;
+import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.dto.UserUpdateDTO;
 import mk.ukim.finki.uiktp.sweet_delivery.model.userroles.User;
 import mk.ukim.finki.uiktp.sweet_delivery.repository.UserRepository;
 import mk.ukim.finki.uiktp.sweet_delivery.service.UserService;
@@ -76,24 +77,34 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> update(Long userId, String username, Boolean changePassword, String oldPassword,
-                                 String newPassword, String firstName, String lastName, String email, String address) {
+    public User update(UserUpdateDTO userUpdateDTO) {
 
-        User user = this.userRepository.findById(userId).orElseThrow(() -> new InvalidUserIdException(userId));
+        User user = this.userRepository.findById(userUpdateDTO.getUserId()).orElseThrow(() -> new InvalidUserIdException(userUpdateDTO.getUserId()));
 
         // Boolean value indicates if user wants to change the password, or leave it unchanged
         // If the user wants to change the password, he must first enter the old password, and if it matches only then change
-        if(changePassword && !oldPassword.isEmpty() && !passwordEncoder.matches(oldPassword, user.getPassword())) {
-            user.setPassword(passwordEncoder.encode(newPassword));
+        if(userUpdateDTO.getChangePassword() && !userUpdateDTO.getOldPassword().isEmpty() && !passwordEncoder.matches(userUpdateDTO.getOldPassword(), user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(userUpdateDTO.getNewPassword()));
         }
 
-        user.setUsername(username);
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setEmail(email);
-        user.setAddress(address);
+        if(userUpdateDTO.getUsername()!=null){
+            user.setUsername(user.getUsername());
+        }
+        if(userUpdateDTO.getFirstName()!=null){
+            user.setFirstName(userUpdateDTO.getFirstName());
+        }
+        if(userUpdateDTO.getLastName()!=null){
+            user.setLastName(userUpdateDTO.getLastName());
+        }
+        if(userUpdateDTO.getEmail()!=null){
+            user.setEmail(userUpdateDTO.getEmail());
+        }
+        if(userUpdateDTO.getAddress()!=null){
+            user.setAddress(userUpdateDTO.getAddress());
+        }
+        user.setAddress(userUpdateDTO.getAddress());
 
-        return Optional.of(this.userRepository.save(user));
+        return this.userRepository.save(user);
     }
 
     @Override

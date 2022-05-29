@@ -4,6 +4,7 @@ import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Item;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Post;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Rating;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Recipe;
+import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.dto.LeaveRatingDTO;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.dto.RecipeCreationDTO;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.dto.RecipePostUpdateDTO;
 
@@ -18,5 +19,5 @@ public interface RecipeService {
     Optional<Recipe> findByRecipeName(String recipeName);
     List<Recipe> getTopRecipes();
     List<Recipe> getAllRecipes();
-    Optional<Recipe> leaveRating(Long recipeId, Rating rating);
+    Recipe leaveRating(LeaveRatingDTO leaveRatingDTO);
 }

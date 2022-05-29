@@ -1,16 +1,18 @@
 package mk.ukim.finki.uiktp.sweet_delivery.service.impl;
 
+import mk.ukim.finki.uiktp.sweet_delivery.model.exceptions.RatingNotFoundException;
 import mk.ukim.finki.uiktp.sweet_delivery.model.exceptions.RecipeAlreadyExistsException;
 import mk.ukim.finki.uiktp.sweet_delivery.model.exceptions.RecipeNotFoundException;
+import mk.ukim.finki.uiktp.sweet_delivery.model.exceptions.UserNotFoundException;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Item;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Post;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Rating;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Recipe;
+import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.dto.LeaveRatingDTO;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.dto.RecipeCreationDTO;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.dto.RecipePostUpdateDTO;
-import mk.ukim.finki.uiktp.sweet_delivery.repository.ItemRepository;
-import mk.ukim.finki.uiktp.sweet_delivery.repository.PostRepository;
-import mk.ukim.finki.uiktp.sweet_delivery.repository.RecipeRepository;
+import mk.ukim.finki.uiktp.sweet_delivery.model.userroles.User;
+import mk.ukim.finki.uiktp.sweet_delivery.repository.*;
 import mk.ukim.finki.uiktp.sweet_delivery.service.RecipeService;
 import org.springframework.stereotype.Service;
 
@@ -25,11 +27,15 @@ public class RecipeServiceImpl implements RecipeService {
     private final RecipeRepository recipeRepository;
     private final ItemRepository itemRepository;
     private final PostRepository postRepository;
+    private final RatingRepository ratingRepository;
+    private final UserRepository userRepository;
 
-    public RecipeServiceImpl(RecipeRepository recipeRepository, ItemRepository itemRepository, PostRepository postRepository) {
+    public RecipeServiceImpl(RecipeRepository recipeRepository, ItemRepository itemRepository, PostRepository postRepository, RatingRepository ratingRepository, UserRepository userRepository) {
         this.recipeRepository = recipeRepository;
         this.itemRepository = itemRepository;
         this.postRepository = postRepository;
+        this.ratingRepository = ratingRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -101,12 +107,18 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Optional<Recipe> leaveRating(Long recipeId, Rating rating) {
+    public Recipe leaveRating(LeaveRatingDTO leaveRatingDTO) {
         // TODO: Change this, recipe must have decimal rating
-        Recipe recipe = this.recipeRepository.findById(recipeId).orElseThrow(RecipeNotFoundException::new);
+        Recipe recipe = this.recipeRepository.findById(leaveRatingDTO.getRecipeId()).orElseThrow(RecipeNotFoundException::new);
+        Rating rating = new Rating();
+        User user = this.userRepository.findByUsername(leaveRatingDTO.getUsername()).orElseThrow(UserNotFoundException::new);
+        rating.setUser(user);
+        rating.setRecipe(recipe);
+        rating.setRecipeStars(leaveRatingDTO.getRecipeStars());
+        this.ratingRepository.save(rating);
         recipe.setRating(rating);
         this.recipeRepository.save(recipe);
-        return Optional.of(recipe);
+        return recipe;
     }
 
 }

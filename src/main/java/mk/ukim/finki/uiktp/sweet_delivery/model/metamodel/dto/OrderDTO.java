@@ -11,12 +11,11 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class OrderDTO {
 
-    Integer amount;
-    String deliveryAddress;
-    List<Recipe> recipeList;
-    User user;
+   private Integer amount;
+   private String deliveryAddress;
+   private List<Long> recipeIds;
+   private Long userId;
 
 }

@@ -2,6 +2,7 @@ package mk.ukim.finki.uiktp.sweet_delivery.web;
 
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Order;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Recipe;
+import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.dto.OrderDTO;
 import mk.ukim.finki.uiktp.sweet_delivery.model.userroles.User;
 import mk.ukim.finki.uiktp.sweet_delivery.service.OrderService;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +28,9 @@ public class OrderController {
      */
 
     @PostMapping("/create")
-    public Optional<Order> createOrder(@RequestParam Integer amount, @RequestParam String deliveryAddress, @RequestParam List<Recipe> recipeList, @RequestParam User user)
+    public Order createOrder(@RequestBody OrderDTO orderDTO)
     {
-        return this.orderService.createOrder(amount, deliveryAddress, recipeList, user);
+        return this.orderService.createOrder(orderDTO);
     }
 
     @DeleteMapping("/delete/{orderId}")

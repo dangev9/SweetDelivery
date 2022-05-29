@@ -4,9 +4,11 @@ package mk.ukim.finki.uiktp.sweet_delivery.web;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Post;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Rating;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Recipe;
+import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.dto.LeaveRatingDTO;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.dto.RecipeCreationDTO;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.dto.RecipePostUpdateDTO;
 import mk.ukim.finki.uiktp.sweet_delivery.service.RecipeService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,14 +51,17 @@ public class RecipeController {
         return this.recipeService.getTopRecipes();
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT')")
     @GetMapping("/findAll")
     public List<Recipe> allRecipes(){
         return this.recipeService.getAllRecipes();
     }
 
-    @PostMapping("/leaveRating/{recipeId}")
-    public Optional<Recipe> leaveRating(@PathVariable Long recipeId, Rating rating){
-          return this.recipeService.leaveRating(recipeId,rating);
+
+    //TODO: testiraj
+    @PostMapping("/leaveRating")
+    public Recipe leaveRating(@RequestBody LeaveRatingDTO leaveRatingDTO){
+          return this.recipeService.leaveRating(leaveRatingDTO);
     }
 
 
