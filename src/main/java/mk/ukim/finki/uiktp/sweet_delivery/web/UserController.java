@@ -4,6 +4,7 @@ import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.dto.UserDataDTO;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.dto.UserResponseDTO;
+import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.dto.UserUpdateDTO;
 import mk.ukim.finki.uiktp.sweet_delivery.model.userroles.User;
 import mk.ukim.finki.uiktp.sweet_delivery.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -88,10 +89,11 @@ public class UserController {
         this.userService.delete(username);
     }*/
 
+    //TODO: postman
     @PostMapping("/update")
-    public Optional<User> update(Long userId, String username, Boolean changePassword, String oldPassword, String newPassword, String firstName, String lastName, String email, String address)
+    public User update(@RequestBody UserUpdateDTO userUpdateDTO)
     {
-        return this.userService.update(userId, username, changePassword, oldPassword, newPassword, firstName, lastName, email, address);
+        return this.userService.update(userUpdateDTO);
     }
 
     @GetMapping("findById/{id}")

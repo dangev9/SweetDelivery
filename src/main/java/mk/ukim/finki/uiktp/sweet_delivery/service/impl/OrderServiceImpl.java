@@ -4,13 +4,16 @@ import mk.ukim.finki.uiktp.sweet_delivery.model.exceptions.OrderException;
 import mk.ukim.finki.uiktp.sweet_delivery.model.exceptions.UserNotFoundException;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Order;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Recipe;
+import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.dto.OrderDTO;
 import mk.ukim.finki.uiktp.sweet_delivery.model.userroles.User;
 import mk.ukim.finki.uiktp.sweet_delivery.repository.OrderRepository;
+import mk.ukim.finki.uiktp.sweet_delivery.repository.RecipeRepository;
 import mk.ukim.finki.uiktp.sweet_delivery.repository.UserRepository;
 import mk.ukim.finki.uiktp.sweet_delivery.service.OrderService;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,20 +21,36 @@ import java.util.Optional;
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
+    private final RecipeRepository recipeRepository;
 
-    public OrderServiceImpl(OrderRepository orderRepository, UserRepository userRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository, UserRepository userRepository, RecipeRepository recipeRepository) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
+        this.recipeRepository = recipeRepository;
     }
 
     @Override
-    public Optional<Order> createOrder(Integer amount, String deliveryAddress, List<Recipe> recipeList, User user) {
+    public Order createOrder(OrderDTO orderDTO) {
 
-        if(recipeList.isEmpty() || amount < 0 || user == null) {
+        if(orderDTO.getRecipeIds().isEmpty() || orderDTO.getAmount() < 0 || orderDTO.getUserId() == null) {
             throw new OrderException();
         }
         OffsetDateTime dateCreated = OffsetDateTime.now();
-        return Optional.of(this.orderRepository.save(new Order(dateCreated, amount, deliveryAddress, recipeList, user)));
+        Order order = new Order();
+        order.setOrderDate(dateCreated);
+        order.setAmount(orderDTO.getAmount());
+        order.setDeliveryAddress(orderDTO.getDeliveryAddress());
+        User user = this.userRepository.getById(orderDTO.getUserId());
+        order.setUser(user);
+        List<Recipe> recipeList = new ArrayList<>();
+        for(int i =0;i<orderDTO.getRecipeIds().size();i++) {
+            Recipe recipe = this.recipeRepository.getById(orderDTO.getRecipeIds().get(i));
+            recipeList.add(recipe);
+        }
+
+        order.setRecipeList(recipeList);
+        this.orderRepository.save(order);
+        return order;
     }
 
     @Override
