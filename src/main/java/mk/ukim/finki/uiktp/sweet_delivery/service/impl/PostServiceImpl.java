@@ -41,6 +41,7 @@ public class PostServiceImpl implements PostService {
             post.setDate_created(date_created);
             post.setRecipe(recipe);
             post.setUser(user);
+            post.setPostStatus(PostStatus.PENDING);
         }
         return post;
     }
