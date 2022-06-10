@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Data
 @Entity
@@ -36,10 +38,10 @@ public class Recipe {
 
     private String img_url;
 
-    @ManyToOne
+    @ManyToMany
     @JsonManagedReference
     @JoinColumn(name = "mm_rating_id")
-    private Rating rating;
+    private List<Rating> ratings;
 
     @OneToOne
     @JoinColumn(name  = "mm_post_id")
@@ -52,7 +54,11 @@ public class Recipe {
         this.description = description;
         this.img_url = img_url;
         this.ordersList = new ArrayList<>();
-        this.rating = null;
+        this.ratings = new ArrayList<>();
         this.post = null;
+    }
+
+    public Double getAverageRating(){
+        return this.ratings.stream().flatMapToInt(x -> IntStream.of(x.getRecipeStars())).average().getAsDouble();
     }
 }
