@@ -1,6 +1,5 @@
 package mk.ukim.finki.uiktp.sweet_delivery.service.impl;
 
-import mk.ukim.finki.uiktp.sweet_delivery.model.exceptions.RatingNotFoundException;
 import mk.ukim.finki.uiktp.sweet_delivery.model.exceptions.RecipeAlreadyExistsException;
 import mk.ukim.finki.uiktp.sweet_delivery.model.exceptions.RecipeNotFoundException;
 import mk.ukim.finki.uiktp.sweet_delivery.model.exceptions.UserNotFoundException;
@@ -97,7 +96,7 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public List<Recipe> getTopRecipes() {
         return this.recipeRepository.findAll().stream()
-                .sorted(Comparator.comparing(x -> x.getRating().getRecipeStars()))
+                .sorted(Comparator.comparing(Recipe::getAverageRating))
                 .limit(5).collect(Collectors.toList());
     }
 
@@ -108,7 +107,6 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Recipe leaveRating(LeaveRatingDTO leaveRatingDTO) {
-        // TODO: Change this, recipe must have decimal rating
         Recipe recipe = this.recipeRepository.findById(leaveRatingDTO.getRecipeId()).orElseThrow(RecipeNotFoundException::new);
         Rating rating = new Rating();
         User user = this.userRepository.findByUsername(leaveRatingDTO.getUsername()).orElseThrow(UserNotFoundException::new);
@@ -116,9 +114,10 @@ public class RecipeServiceImpl implements RecipeService {
         rating.setRecipe(recipe);
         rating.setRecipeStars(leaveRatingDTO.getRecipeStars());
         this.ratingRepository.save(rating);
-        recipe.setRating(rating);
+        List<Rating> recipeRatings = recipe.getRatings();
+        recipeRatings.add(rating);
+        recipe.setRatings(recipeRatings);
         this.recipeRepository.save(recipe);
         return recipe;
     }
-
 }
