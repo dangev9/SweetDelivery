@@ -96,7 +96,7 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public List<Recipe> getTopRecipes() {
         return this.recipeRepository.findAll().stream()
-                .sorted(Comparator.comparing(Recipe::getAverageRating))
+                .sorted(Comparator.comparing(Recipe::getAverageRating).reversed())
                 .limit(5).collect(Collectors.toList());
     }
 

@@ -1,6 +1,7 @@
 package mk.ukim.finki.uiktp.sweet_delivery.model.metamodel;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -59,6 +60,9 @@ public class Recipe {
     }
 
     public Double getAverageRating(){
+        if(this.ratings.size() == 0){
+            return 0.0;
+        }
         return this.ratings.stream().flatMapToInt(x -> IntStream.of(x.getRecipeStars())).average().getAsDouble();
     }
 }
