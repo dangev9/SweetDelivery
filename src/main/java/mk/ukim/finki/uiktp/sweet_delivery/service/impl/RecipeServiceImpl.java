@@ -7,6 +7,7 @@ import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Item;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Post;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Rating;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Recipe;
+import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.dto.ItemDTO;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.dto.LeaveRatingDTO;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.dto.RecipeCreationDTO;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.dto.RecipePostUpdateDTO;
@@ -60,8 +61,8 @@ public class RecipeServiceImpl implements RecipeService {
         List<Item> itemList = new ArrayList<>();
         if(recipeCreationDTO.getItemList()!=null && recipeCreationDTO.getItemList().size()>0){
             List<Long> list = recipeCreationDTO.getItemList();
-            for(int i =0;i<list.size();i++){
-                Item item = this.itemRepository.getById(list.get(i));
+            for(Long l : list){
+                Item item = this.itemRepository.getById(l);
                 itemList.add(item);
             }
         }else{

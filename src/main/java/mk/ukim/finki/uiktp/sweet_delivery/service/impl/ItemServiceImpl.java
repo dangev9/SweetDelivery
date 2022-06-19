@@ -28,6 +28,10 @@ public class ItemServiceImpl implements ItemService {
         }
 
         Item item  = new Item();
+        if(itemDTO.getId()!=null){
+            item.setId(itemDTO.getId());
+        }
+
         if(itemDTO.getName()!=null){
             item.setName(itemDTO.getName());
         }
