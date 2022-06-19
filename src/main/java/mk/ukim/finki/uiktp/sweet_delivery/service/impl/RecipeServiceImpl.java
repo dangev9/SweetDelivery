@@ -57,14 +57,19 @@ public class RecipeServiceImpl implements RecipeService {
         if(recipeCreationDTO.getPrice()!=null){
             recipe.setPrice(recipeCreationDTO.getPrice());
         }
-        List<Long> list = recipeCreationDTO.getItemList();
         List<Item> itemList = new ArrayList<>();
-        for(int i =0;i<list.size();i++){
-            Item item = this.itemRepository.getById(list.get(i));
-            itemList.add(item);
+        if(recipeCreationDTO.getItemList()!=null && recipeCreationDTO.getItemList().size()>0){
+            List<Long> list = recipeCreationDTO.getItemList();
+            for(int i =0;i<list.size();i++){
+                Item item = this.itemRepository.getById(list.get(i));
+                itemList.add(item);
+            }
+        }else{
+            recipe.setItemList(null);
         }
 
         recipe.setItemList(itemList);
+        recipe.setOrdersList(null);
         return this.recipeRepository.save(recipe);
     }
 

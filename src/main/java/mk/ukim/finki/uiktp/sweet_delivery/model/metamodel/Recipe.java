@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mk.ukim.finki.uiktp.sweet_delivery.model.exceptions.RecipeNotFoundException;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -59,10 +60,16 @@ public class Recipe {
         this.post = null;
     }
 
+    @JsonIgnore
     public Double getAverageRating(){
         if(this.ratings.size() == 0){
             return 0.0;
         }
-        return this.ratings.stream().flatMapToInt(x -> IntStream.of(x.getRecipeStars())).average().getAsDouble();
+        if(this.ratings!=null){
+            return this.ratings.stream().flatMapToInt(x -> IntStream.of(x.getRecipeStars())).average().getAsDouble();
+        }else{
+            throw new RecipeNotFoundException();
+        }
+
     }
 }
