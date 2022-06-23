@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import mk.ukim.finki.uiktp.sweet_delivery.model.userroles.User;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
@@ -32,6 +31,9 @@ public class Order {
 
     @ManyToMany
     private List<Recipe> recipeList;
+
+    @ElementCollection
+    private List<Integer> recipesQuantity;
 
     @ManyToOne
     @JoinColumn(name = "ur_user_id")

@@ -1,8 +1,6 @@
 package mk.ukim.finki.uiktp.sweet_delivery.service.impl;
 
-import mk.ukim.finki.uiktp.sweet_delivery.model.enums.ItemCategory;
 import mk.ukim.finki.uiktp.sweet_delivery.model.exceptions.ItemAlreadyExistsException;
-import mk.ukim.finki.uiktp.sweet_delivery.model.exceptions.ItemNotFoundException;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Item;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.dto.ItemDTO;
 import mk.ukim.finki.uiktp.sweet_delivery.repository.ItemRepository;
@@ -10,7 +8,6 @@ import mk.ukim.finki.uiktp.sweet_delivery.service.ItemService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ItemServiceImpl implements ItemService {
@@ -28,9 +25,6 @@ public class ItemServiceImpl implements ItemService {
         }
 
         Item item  = new Item();
-        if(itemDTO.getId()!=null){
-            item.setId(itemDTO.getId());
-        }
 
         if(itemDTO.getName()!=null){
             item.setName(itemDTO.getName());

@@ -10,6 +10,7 @@ import mk.ukim.finki.uiktp.sweet_delivery.repository.OrderRepository;
 import mk.ukim.finki.uiktp.sweet_delivery.repository.RecipeRepository;
 import mk.ukim.finki.uiktp.sweet_delivery.repository.UserRepository;
 import mk.ukim.finki.uiktp.sweet_delivery.service.OrderService;
+
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
@@ -32,7 +33,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order createOrder(OrderDTO orderDTO) {
 
-        if(orderDTO.getRecipeIds().isEmpty() || orderDTO.getAmount() < 0 || orderDTO.getUserId() == null) {
+        if(orderDTO.getOrderContent().isEmpty() || orderDTO.getAmount() < 0 || orderDTO.getUserId() == null) {
             throw new OrderException();
         }
         OffsetDateTime dateCreated = OffsetDateTime.now();
@@ -43,12 +44,16 @@ public class OrderServiceImpl implements OrderService {
         User user = this.userRepository.getById(orderDTO.getUserId());
         order.setUser(user);
         List<Recipe> recipeList = new ArrayList<>();
-        for(int i =0;i<orderDTO.getRecipeIds().size();i++) {
-            Recipe recipe = this.recipeRepository.getById(orderDTO.getRecipeIds().get(i));
+        List<Integer> recipeQuantities = new ArrayList<>();
+
+        orderDTO.getOrderContent().forEach(x -> {
+            Recipe recipe = this.recipeRepository.getById(x.getRecipeId());
             recipeList.add(recipe);
-        }
+            recipeQuantities.add(x.getRecipeQuantity());
+        });
 
         order.setRecipeList(recipeList);
+        order.setRecipesQuantity(recipeQuantities);
         this.orderRepository.save(order);
         return order;
     }
