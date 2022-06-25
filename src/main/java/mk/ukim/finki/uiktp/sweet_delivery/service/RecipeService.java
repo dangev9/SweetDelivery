@@ -20,4 +20,5 @@ public interface RecipeService {
     List<Recipe> getTopRecipes();
     List<Recipe> getAllRecipes();
     Recipe leaveRating(LeaveRatingDTO leaveRatingDTO);
+    List<Recipe> returnApprovedRecipePosts();
 }

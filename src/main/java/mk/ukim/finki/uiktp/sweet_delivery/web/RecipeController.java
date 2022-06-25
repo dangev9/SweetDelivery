@@ -64,5 +64,9 @@ public class RecipeController {
           return this.recipeService.leaveRating(leaveRatingDTO);
     }
 
+    @GetMapping("/approvedRecipePosts")
+    public List<Recipe> approvedRecipePosts(){
+        return this.recipeService.returnApprovedRecipePosts();
+    }
 
 }

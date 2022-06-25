@@ -127,4 +127,19 @@ public class RecipeServiceImpl implements RecipeService {
         this.recipeRepository.save(recipe);
         return recipe;
     }
+
+    @Override
+    public List<Recipe> returnApprovedRecipePosts() {
+     List<Recipe> allRecipes = this.recipeRepository.findAll();
+     List<Recipe> approvedRecipes = new ArrayList<>();
+
+        for (Recipe allRecipe : allRecipes) {
+            if(allRecipe.getPost()!=null && allRecipe.getPost().getPostStatus().name().equals("APPROVED")){
+                approvedRecipes.add(allRecipe);
+            }
+
+        }
+
+        return approvedRecipes;
+    }
 }
