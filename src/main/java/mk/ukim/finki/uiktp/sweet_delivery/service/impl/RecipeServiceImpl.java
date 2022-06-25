@@ -1,5 +1,6 @@
 package mk.ukim.finki.uiktp.sweet_delivery.service.impl;
 
+import mk.ukim.finki.uiktp.sweet_delivery.model.exceptions.ItemNotFoundException;
 import mk.ukim.finki.uiktp.sweet_delivery.model.exceptions.RecipeAlreadyExistsException;
 import mk.ukim.finki.uiktp.sweet_delivery.model.exceptions.RecipeNotFoundException;
 import mk.ukim.finki.uiktp.sweet_delivery.model.exceptions.UserNotFoundException;

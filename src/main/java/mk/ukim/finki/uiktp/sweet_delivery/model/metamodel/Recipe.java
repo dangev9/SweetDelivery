@@ -62,15 +62,10 @@ public class Recipe {
         this.post = null;
     }
 
-    @JsonIgnore
     public Double getAverageRating(){
         if(this.ratings.size() == 0){
             return 0.0;
         }
-        if(this.ratings!=null){
-            return this.ratings.stream().flatMapToInt(x -> IntStream.of(x.getRecipeStars())).average().getAsDouble();
-        }else{
-            throw new RecipeNotFoundException();
-        }
+        return this.ratings.stream().flatMapToInt(x -> IntStream.of(x.getRecipeStars())).average().getAsDouble();
     }
 }

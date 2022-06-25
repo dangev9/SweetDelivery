@@ -2,6 +2,7 @@ package mk.ukim.finki.uiktp.sweet_delivery.service.impl;
 
 import mk.ukim.finki.uiktp.sweet_delivery.model.enums.PostStatus;
 import mk.ukim.finki.uiktp.sweet_delivery.model.exceptions.PostNotFoundException;
+import mk.ukim.finki.uiktp.sweet_delivery.model.exceptions.RecipeNotFoundException;
 import mk.ukim.finki.uiktp.sweet_delivery.model.exceptions.UserNotFoundException;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Post;
 import mk.ukim.finki.uiktp.sweet_delivery.model.metamodel.Recipe;
@@ -33,8 +34,8 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post createPost(PostDTO postDTO) {
 
-        Recipe recipe = this.recipeRepository.getById(postDTO.getRecipeId());
-        User user = this.userRepository.findById(postDTO.getUserId()).orElseThrow(UserNotFoundException::new);
+        Recipe recipe = this.recipeRepository.findById(postDTO.getRecipeId()).orElseThrow(RecipeNotFoundException::new);
+        User user = this.userRepository.findByUsername(postDTO.getUserName()).orElseThrow(UserNotFoundException::new);
         Post post = new Post();
         if(user != null) {
             OffsetDateTime date_created = OffsetDateTime.now();

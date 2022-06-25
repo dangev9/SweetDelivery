@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PostDTO {
     private Long recipeId;
-    private Long userId;
+    private String userName;
 }
